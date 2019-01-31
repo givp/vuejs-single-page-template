@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>My VueJS Single Page Template</title>
+
+    <script src="https://unpkg.com/vue"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/3.6.3/superagent.min.js"></script>
+    <style>
+      [v-cloak] { display:none; }
+      body {
+        font-family: arial;
+        font-color: #333;
+      }
+    </style>
+  </head>
+  <body>
+
+    <div id="app" v-cloak>
+      <h1>This is the template</h1>
+      <p>{{ debug }}</p>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function(){
+        var request = window.superagent;
+
+        new Vue({
+          el: '#app',
+          data: {
+            people: [],
+            debug: ""
+          },
+          mounted: function () {
+            this.debug = "Hello, vuejs!";
+          },
+          methods: {
+            getPeople: function (event) {
+              var vm = this;
+
+              request.get('/api/endpoint', {}, function(err, res){
+                if (err) throw err;
+                response = JSON.parse(res.text);
+                vm.people = response.people;
+              })
+            }
+          }
+        })
+      });
+    </script>
+
+  </body>
+</html>
